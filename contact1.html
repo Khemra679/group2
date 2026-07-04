@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MovieFlix — Contact Us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0a0f;
+    --bg-raised: #171420;
+    --bg-card: #1c1826;
+    --gold: #e8b54d;
+    --gold-dim: #a3823a;
+    --crimson: #c81e3a;
+    --crimson-bright: #e6304c;
+    --cream: #f4ecd8;
+    --muted: #948d9e;
+    --hairline: #322c3c;
+    --radius: 3px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Work Sans', sans-serif;
+    background-color: var(--bg);
+    color: var(--cream);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; }
+
+  h1, h2, .display {
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+  }
+
+  /* ---------- Sprocket / film-strip divider ---------- */
+  .filmstrip {
+    height: 14px;
+    background-image:
+      radial-gradient(circle, var(--bg) 3.5px, transparent 3.6px),
+      radial-gradient(circle, var(--bg) 3.5px, transparent 3.6px);
+    background-color: var(--gold-dim);
+    background-position: 0 0, 17px 0;
+    background-size: 34px 14px;
+    background-repeat: repeat-x;
+  }
+  .filmstrip.dim { background-color: var(--hairline); }
+
+  /* ---------- Nav ---------- */
+  nav {
+    background-color: var(--bg);
+    padding: 18px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .logo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+  .logo::before {
+    content: "●";
+    color: var(--crimson-bright);
+    font-size: 11px;
+  }
+  .logo em { font-style: normal; color: var(--cream); }
+
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 32px;
+  }
+  .nav-links a {
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-bottom: 4px;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--gold); border-color: var(--gold); }
+
+  .nav-right { display: flex; align-items: center; gap: 14px; }
+
+  .btn-signin {
+    background-color: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 8px 18px;
+    text-decoration: none;
+    border-radius: var(--radius);
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  .btn-signin:hover { background-color: var(--gold); color: var(--bg); }
+
+  /* ---------- Page header ---------- */
+  .page-header {
+    position: relative;
+    padding: 64px 48px 52px;
+    background-image:
+      linear-gradient(90deg, rgba(11,10,15,0.97) 15%, rgba(11,10,15,0.7) 100%),
+      url("https://i.pinimg.com/1200x/0f/59/49/0f59496b11746c54b937b5b2f98f7ac4.jpg");
+    background-size: cover;
+    background-position: center 30%;
+  }
+  .page-header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--crimson);
+    color: var(--cream);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+  .page-header h1 {
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+  }
+  .page-header p {
+    color: var(--muted);
+    font-size: 16px;
+    font-style: italic;
+    max-width: 520px;
+    border-left: 2px solid var(--gold-dim);
+    padding-left: 14px;
+  }
+
+  /* ---------- Section ---------- */
+  .section { padding: 48px 48px; }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+  .section-title::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    background-color: var(--crimson-bright);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--crimson-bright);
+  }
+
+  /* ---------- Contact layout ---------- */
+  .contact-wrap {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  /* ---------- Ticket-stub contact form (signature element) ---------- */
+  .ticket {
+    flex: 1 1 480px;
+    background-color: var(--bg-card);
+    border-radius: var(--radius);
+    position: relative;
+    display: flex;
+    min-height: 560px;
+  }
+
+  .ticket-main {
+    flex: 1;
+    padding: 34px 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .ticket-eyebrow {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+
+  .ticket-heading {
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field label {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    background-color: var(--bg-raised);
+    border: 1px solid var(--hairline);
+    color: var(--cream);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 14px;
+  }
+  .field input::placeholder,
+  .field textarea::placeholder { color: #625a70; }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+  .field textarea { resize: vertical; min-height: 120px; }
+
+  .field-row { display: flex; gap: 16px; }
+  .field-row .field { flex: 1; }
+
+  .btn-submit {
+    align-self: flex-start;
+    background-color: var(--crimson);
+    color: var(--cream);
+    border: none;
+    padding: 14px 30px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.15s;
+    margin-top: 4px;
+    font-family: 'Work Sans', sans-serif;
+  }
+  .btn-submit:hover { background-color: var(--crimson-bright); transform: translateY(-1px); }
+
+  /* perforated tear between form and stub */
+  .ticket-tear {
+    width: 0;
+    border-left: 2px dashed var(--hairline);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .ticket-tear::before,
+  .ticket-tear::after {
+    content: "";
+    position: absolute;
+    left: -9px;
+    width: 16px;
+    height: 16px;
+    background-color: var(--bg);
+    border-radius: 50%;
+  }
+  .ticket-tear::before { top: -8px; }
+  .ticket-tear::after { bottom: -8px; }
+
+  .ticket-stub {
+    width: 190px;
+    padding: 34px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-image: repeating-linear-gradient(
+      -45deg,
+      rgba(232,181,77,0.03),
+      rgba(232,181,77,0.03) 10px,
+      transparent 10px,
+      transparent 20px
+    );
+  }
+  .stub-top { display: flex; flex-direction: column; gap: 4px; }
+  .stub-label {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+  .stub-value {
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    color: var(--cream);
+    margin-bottom: 14px;
+  }
+  .stub-seal {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: var(--gold);
+    color: var(--bg);
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.2;
+    align-self: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  }
+
+  /* ---------- Info cards ---------- */
+  .info-col {
+    flex: 1 1 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .info-card {
+    background-color: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .info-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: var(--crimson);
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .info-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .info-detail {
+    font-size: 14px;
+    color: var(--cream);
+    line-height: 1.5;
+  }
+  .info-detail span {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 2px;
+  }
+
+  .social-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .social-row a {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--hairline);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 13px;
+    color: var(--muted);
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .social-row a:hover { color: var(--gold); border-color: var(--gold); }
+
+  /* ---------- Footer ---------- */
+  footer {
+    background-color: var(--bg);
+    padding: 36px 48px 28px;
+    text-align: center;
+  }
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .footer-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-copy { color: #524b5e; font-size: 11px; letter-spacing: 0.5px; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 900px) {
+    .ticket { flex-direction: column; min-height: 0; }
+    .ticket-tear { width: auto; border-left: none; border-top: 2px dashed var(--hairline); margin: 0 20px; }
+    .ticket-tear::before { left: -8px; top: -9px; }
+    .ticket-tear::after { left: auto; right: -8px; top: -9px; bottom: auto; }
+    .ticket-stub { width: auto; flex-direction: row; align-items: center; justify-content: space-between; }
+    .stub-top { flex-direction: row; gap: 20px; align-items: center; }
+    .stub-value { margin-bottom: 0; }
+  }
+
+  @media (max-width: 720px) {
+    nav { flex-wrap: wrap; gap: 14px; padding: 16px 20px; }
+    .nav-links { display: none; }
+    .page-header { padding: 44px 20px 36px; }
+    .page-header h1 { font-size: 34px; }
+    .section { padding: 32px 20px; }
+    .field-row { flex-direction: column; gap: 18px; }
+    .ticket-main { padding: 26px 22px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-submit { transition: none; }
+  }
+</style>
+</head>
+
+<body>
+
+  <nav>
+    <a href="index.html" class="logo">MOVIE<em>FLIX</em></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#">Movies</a></li>
+      <li><a href="#">Genres</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="login.html" class="btn-signin">Sign In</a>
+    </div>
+  </nav>
+
+  <div class="filmstrip"></div>
+
+  <div class="page-header">
+    <div class="page-header-badge">🎟 Box Office</div>
+    <h1>Get In Touch</h1>
+    <p>"Every great picture starts with a conversation." Questions, feedback, or a ticket issue — we're listening.</p>
+  </div>
+
+  <div class="filmstrip"></div>
+
+  <div class="section">
+    <div class="section-title">Send a Message</div>
+    <div class="contact-wrap">
+
+      <!-- Ticket-stub contact form -->
+      <form class="ticket" onsubmit="return false;">
+        <div class="ticket-main">
+          <div class="ticket-eyebrow">Admit One &nbsp;·&nbsp; Contact Form</div>
+          <div class="ticket-heading">Tell Us What's Playing on Your Mind</div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="fname">First Name</label>
+              <input id="fname" type="text" placeholder="Jane" required />
+            </div>
+            <div class="field">
+              <label for="lname">Last Name</label>
+              <input id="lname" type="text" placeholder="Doe" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="jane@example.com" required />
+          </div>
+
+          <div class="field">
+            <label for="topic">Topic</label>
+            <select id="topic">
+              <option>General Inquiry</option>
+              <option>Ticketing &amp; Refunds</option>
+              <option>Technical Support</option>
+              <option>Partnerships</option>
+              <option>Press</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea id="message" placeholder="Roll the tape — what's on your mind?" required></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit">▶ Submit Message</button>
+        </div>
+
+        <div class="ticket-tear"></div>
+
+        <div class="ticket-stub">
+          <div class="stub-top">
+            <div>
+              <div class="stub-label">Response Time</div>
+              <div class="stub-value">Within 24 Hrs</div>
+            </div>
+            <div>
+              <div class="stub-label">Support Hours</div>
+              <div class="stub-value">Mon–Sat, 9–8</div>
+            </div>
+          </div>
+          <div class="stub-seal">MOVIE<br>FLIX</div>
+        </div>
+      </form>
+
+      <!-- Info column -->
+      <div class="info-col">
+        <div class="info-card">
+          <div class="info-icon">✉</div>
+          <div>
+            <div class="info-title">Email</div>
+            <div class="info-detail">support@movieflix.example
+              <span>General questions &amp; ticketing</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon">☎</div>
+          <div>
+            <div class="info-title">Phone</div>
+            <div class="info-detail"> + (855) 012 34 56 78
+              <span>Mon–Sat, 9am–8pm</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon">📍</div>
+          <div>
+            <div class="info-title">Studio Office</div>
+            <div class="info-detail">AEON  Mall Sen Sok City,Street 1003
+              <span> Phnom Penh, Cambodai </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon">🎬</div>
+          <div>
+            <div class="info-title">Follow Along</div>
+            <div class="info-detail">
+              <span>@movieflix on every screen</span>
+              <div class="social-row">
+                <a href="#" aria-label="Facebook">f</a>
+                <a href="#" aria-label="Instagram">ig</a>
+                <a href="#" aria-label="YouTube">yt</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="filmstrip dim"></div>
+
+  <footer>
+    <div class="footer-links">
+      <a href="#">About</a>
+      <a href="#">Privacy</a>
+      <a href="contact.html">Contact</a>
+      <a href="#">Facebook</a>
+      <a href="#">Instagram</a>
+      <a href="#">YouTube</a>
+    </div>
+    <div class="footer-copy">&copy; 2026 MovieFlix. All rights reserved.</div>
+  </footer>
+
+</body>
+
+</html>
