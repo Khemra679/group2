@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MovieFlix — About Us</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --bg:#0b0a0f;
+    --bg-card:#171420;
+    --gold:#e8b54d;
+    --gold-dim:#a3823a;
+    --crimson:#c81e3a;
+    --cream:#f4ecd8;
+    --muted:#948d9e;
+    --hairline:#322c3c;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Work Sans',sans-serif;
+    background:var(--bg);
+    color:var(--cream);
+}
+
+h1,h2{
+    font-family:'Oswald',sans-serif;
+    text-transform:uppercase;
+}
+
+/* Navigation */
+
+nav {
+    background-color: var(--bg);
+    padding: 18px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .logo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo::before {
+    content: "●";
+    color: var(--crimson-bright);
+    font-size: 11px;
+  }
+  .logo em { font-style: normal; color: var(--cream); }
+
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 32px;
+  }
+  .nav-links a {
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-bottom: 4px;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); border-color: var(--gold); }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .nav-right input {
+    padding: 9px 14px;
+    border: 1px solid var(--hairline);
+    background-color: var(--bg-raised);
+    color: var(--cream);
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-family: 'Work Sans', sans-serif;
+    width: 180px;
+  }
+  .nav-right input::placeholder { color: var(--muted); }
+  .nav-right input:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+
+  .btn-signin {
+    background-color: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 8px 18px;
+    text-decoration: none;
+    border-radius: var(--radius);
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  .btn-signin:hover { background-color: var(--gold); color: var(--bg); }
+/* Hero */
+
+.hero{
+    text-align:center;
+    padding:100px 20px;
+    background:
+    linear-gradient(rgba(0,0,0,.75),rgba(0,0,0,.75)),
+    url("https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=80");
+    background-size:cover;
+    background-position:center;
+}
+
+.hero h1{
+    font-size:60px;
+    color:var(--gold);
+    margin-bottom:20px;
+}
+
+.hero p{
+    max-width:700px;
+    margin:auto;
+    color:var(--cream);
+    line-height:1.8;
+    font-size:18px;
+}
+
+/* Sections */
+
+.section{
+    padding:70px 50px;
+}
+
+.section-title{
+    color:var(--gold);
+    margin-bottom:25px;
+    font-size:30px;
+}
+
+.card{
+    background:var(--bg-card);
+    border:1px solid var(--hairline);
+    padding:30px;
+    border-radius:5px;
+    line-height:1.8;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:25px;
+    margin-top:30px;
+}
+
+.feature{
+    background:var(--bg-card);
+    padding:30px;
+    border-radius:5px;
+    text-align:center;
+    border:1px solid var(--hairline);
+}
+
+.feature h3{
+    color:var(--gold);
+    margin:15px 0;
+}
+
+.feature p{
+    color:var(--muted);
+}
+
+/* Footer */
+
+/* ---------- Footer ---------- */
+  footer {
+    background-color: var(--bg);
+    padding: 36px 48px 28px;
+    text-align: center;
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .footer-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+
+  .footer-copy {
+    color: #524b5e;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+
+@media(max-width:768px){
+    nav{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .hero h1{
+        font-size:40px;
+    }
+
+    .section{
+        padding:40px 20px;
+    }
+}
+
+/* Team CSS ដាក់នៅទីនេះ */
+.team-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:25px;
+    margin-top:30px;
+}
+.team-card{
+    background:var(--bg-card);
+    border:1px solid var(--hairline);
+    border-radius:8px;
+    padding:20px;
+    text-align:center;
+}
+
+.team-card img{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    object-fit:cover;
+    border:3px solid var(--gold);
+    margin-bottom:15px;
+}
+
+.member-btn{
+    background:var(--gold);
+    color:#111;
+    border:none;
+    padding:10px 20px;
+    border-radius:5px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.member-btn:hover{
+    background:var(--crimson);
+    color:white;
+}
+
+
+</style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">MOVIE<em>FLIX</em></div>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Movies</a></li>
+      <li><a href="#">Genres</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <input type="text" placeholder="Search movies..." />
+      <a href="login.html" class="btn-signin">Sign In</a>
+    </div>
+  </nav>
+
+<section class="hero">
+
+<h1>About MovieFlix</h1>
+
+<p>
+MovieFlix is your ultimate destination for discovering blockbuster movies,
+classic favorites, and the latest releases. Our goal is to make movie
+exploration simple, enjoyable, and visually immersive.
+</p>
+
+</section>
+
+<section class="section">
+
+<h2 class="section-title">Who We Are</h2>
+
+<div class="card">
+
+<p>
+Founded by movie enthusiasts, MovieFlix is designed for people who love
+cinema. From action-packed adventures to emotional dramas, our platform
+helps you discover movies worth watching.
+</p>
+
+<br>
+
+<p>
+We continuously update our collection with trending films, top-rated
+classics, and upcoming releases so you'll never run out of entertainment.
+</p>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<h2 class="section-title">Why Choose Us</h2>
+
+<div class="grid">
+
+<div class="feature">
+<h3>🎬 Huge Collection</h3>
+<p>Browse hundreds of movies from different genres and years.</p>
+</div>
+
+<div class="feature">
+<h3>⭐ Top Ratings</h3>
+<p>Discover the highest-rated movies loved by audiences worldwide.</p>
+</div>
+
+<div class="feature">
+<h3>🚀 Fast & Modern</h3>
+<p>Simple interface with a cinematic design for the best user experience.</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<h2 class="section-title">Our Mission</h2>
+
+<div class="card">
+
+<p>
+Our mission is to bring movie lovers together by creating a platform where
+finding your next favorite film is exciting and effortless. Whether you're
+looking for timeless classics or the newest releases, MovieFlix has you
+covered.
+</p>
+
+</div>
+
+</section>
+
+<section class="section">
+
+    <h2 class="section-title">Our Team</h2>
+
+    <div class="team-grid">
+
+        <div class="team-card">
+            <img src="khemra.jpg" alt="Member 1">
+            <button class="member-btn">Phoeurn Khemra</button>
+        </div>
+
+        <div class="team-card">
+            <img src="danh lynn.jpg" alt="Member 2">
+            <button class="member-btn">Nget Dalin</button>
+        </div>
+
+        <div class="team-card">
+            <img src="sreylin.jpg" alt="Member 3">
+            <button class="member-btn">khen Sreyin</button>
+        </div>
+
+        <div class="team-card">
+            <img src="rithy sak.jpg" alt="Member 4">
+            <button class="member-btn">San Rithy Sak</button>
+        </div>
+
+        <div class="team-card">
+            <img src="photo_2026-03-12_07-48-44 pozz sart.jpg" alt="Member 5">
+            <button class="member-btn">San Seyha</button>
+        </div>
+
+    </div>
+
+</section>
+
+<footer>
+    <div class="footer-links">
+      <a href="#">About</a>
+      <a href="#">Privacy</a>
+      <a href="#">Contact</a>
+      <a href="#">Facebook</a>
+      <a href="#">Instagram</a>
+      <a href="#">YouTube</a>
+    </div>
+    <div class="footer-copy">&copy; 2026 MovieFlix. All rights reserved.</div>
+  </footer>
+  
+
+</body>
+</html>
