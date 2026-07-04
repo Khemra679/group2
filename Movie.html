@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MovieFlix — All Movies</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b0a0f;
+            --bg-raised: #171420;
+            --bg-card: #1c1826;
+            --gold: #e8b54d;
+            --gold-dim: #a3823a;
+            --crimson: #c81e3a;
+            --crimson-bright: #e6304c;
+            --cream: #f4ecd8;
+            --muted: #948d9e;
+            --hairline: #322c3c;
+            --radius: 3px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--cream);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        h1,
+        h2,
+        .display {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+        }
+
+        /* ---------- Sprocket / film-strip divider (signature element) ---------- */
+        .filmstrip {
+            height: 14px;
+            background-image:
+                radial-gradient(circle, var(--bg) 3.5px, transparent 3.6px),
+                radial-gradient(circle, var(--bg) 3.5px, transparent 3.6px);
+            background-color: var(--gold-dim);
+            background-position: 0 0, 17px 0;
+            background-size: 34px 14px;
+            background-repeat: repeat-x;
+        }
+
+        .filmstrip.dim {
+            background-color: var(--hairline);
+        }
+
+        /* ---------- Nav ---------- */
+        nav {
+            background-color: var(--bg);
+            padding: 18px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--hairline);
+        }
+
+        .logo {
+            font-family: 'Oswald', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo::before {
+            content: "●";
+            color: var(--crimson-bright);
+            font-size: 11px;
+        }
+
+        .logo em {
+            font-style: normal;
+            color: var(--cream);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding-bottom: 4px;
+            border-bottom: 1px solid transparent;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .nav-right input {
+            padding: 9px 14px;
+            border: 1px solid var(--hairline);
+            background-color: var(--bg-raised);
+            color: var(--cream);
+            border-radius: var(--radius);
+            font-size: 13px;
+            font-family: 'Work Sans', sans-serif;
+            width: 180px;
+        }
+
+        .nav-right input::placeholder {
+            color: var(--muted);
+        }
+
+        .nav-right input:focus {
+            outline: 2px solid var(--gold);
+            outline-offset: 1px;
+        }
+
+        .btn-signin {
+            background-color: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 8px 18px;
+            text-decoration: none;
+            border-radius: var(--radius);
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .btn-signin:hover {
+            background-color: var(--gold);
+            color: var(--bg);
+        }
+
+        /* ---------- Page header ---------- */
+        .page-header {
+            padding: 48px 48px 8px;
+            text-align: center;
+        }
+
+        .page-header .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 14px;
+        }
+
+        .page-header .eyebrow::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background-color: var(--crimson-bright);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--crimson-bright);
+        }
+
+        .page-header h1 {
+            font-size: 44px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .page-header p {
+            color: var(--muted);
+            font-size: 15px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* ---------- Genre filters ---------- */
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            padding: 28px 48px 44px;
+        }
+
+        .filter-pill {
+            background-color: var(--bg-raised);
+            border: 1px solid var(--hairline);
+            color: var(--muted);
+            padding: 9px 20px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+        }
+
+        .filter-pill:hover {
+            border-color: var(--gold);
+            color: var(--cream);
+        }
+
+        .filter-pill.active {
+            background-color: var(--gold);
+            border-color: var(--gold);
+            color: var(--bg);
+        }
+
+        /* ---------- Sections ---------- */
+        .section {
+            padding: 12px 48px 44px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 24px;
+        }
+        .section-title::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background-color: var(--crimson-bright);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--crimson-bright);
+        }
+
+        .movie-grid {
+            display: flex;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+
+        .empty-state {
+            width: 100%;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .empty-state .glyph-big {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        /* ---------- Ticket-stub movie cards (signature element) ---------- */
+        .movie-card {
+            background-color: var(--bg-card);
+            border-radius: var(--radius);
+            overflow: visible;
+            width: calc(25% - 17px);
+            min-width: 220px;
+            text-decoration: none;
+            color: var(--cream);
+            position: relative;
+            transition: transform 0.2s ease;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .movie-card:hover .card-thumb {
+            filter: brightness(1.08);
+        }
+
+        .card-thumb-wrap {
+            position: relative;
+        }
+
+        .card-thumb {
+            width: 100%;
+            height: 458px;
+            object-fit: cover;
+            display: block;
+            border-radius: var(--radius) var(--radius) 0 0;
+            transition: filter 0.2s ease;
+        }
+
+        .card-rating-seal {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background-color: var(--gold);
+            color: var(--bg);
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-genre-tag {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background-color: rgba(11, 10, 15, 0.75);
+            border: 1px solid rgba(244, 236, 216, 0.25);
+            color: var(--cream);
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 4px 9px;
+            border-radius: 999px;
+        }
+
+        /* torn perforation between poster and stub info */
+        .card-tear {
+            position: relative;
+            height: 0;
+            border-top: 2px dashed var(--hairline);
+            margin: 0 12px;
+        }
+
+        .card-tear::before,
+        .card-tear::after {
+            content: "";
+            position: absolute;
+            top: -8px;
+            width: 16px;
+            height: 16px;
+            background-color: var(--bg);
+            border-radius: 50%;
+        }
+
+        .card-tear::before {
+            left: -20px;
+        }
+
+        .card-tear::after {
+            right: -20px;
+        }
+
+        .card-info {
+            padding: 14px 16px 16px;
+        }
+
+        .card-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .card-meta {
+            font-size: 12px;
+            color: var(--muted);
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .card-meta strong {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .card-soon {
+            display: inline-block;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--crimson-bright);
+            border: 1px solid var(--crimson);
+            padding: 5px 10px;
+            border-radius: 2px;
+        }
+
+        .card-watch {
+            display: block;
+            text-align: center;
+            background-color: var(--crimson);
+            color: var(--cream);
+            text-decoration: none;
+            padding: 9px 0;
+            border-radius: var(--radius);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+
+        .card-watch:hover {
+            background-color: var(--crimson-bright);
+        }
+        /* ---------- Footer ---------- */
+        footer {
+            background-color: var(--bg);
+            padding: 36px 48px 28px;
+            text-align: center;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .footer-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+        .footer-copy {
+            color: #524b5e;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+        /* ---------- Responsive ---------- */
+        @media (max-width: 980px) {
+            .movie-card {
+                width: calc(50% - 11px);
+            }
+        }
+        @media (max-width: 720px) {
+            nav {
+                flex-wrap: wrap;
+                gap: 14px;
+                padding: 16px 20px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .page-header {
+                padding: 36px 20px 8px;
+            }
+            .page-header h1 {
+                font-size: 32px;
+            }
+
+            .filters {
+                padding: 22px 20px 32px;
+            }
+            .section {
+                padding: 12px 20px 32px;
+            }
+
+            .movie-card {
+                width: 100%;
+            }
+
+            .nav-right input {
+                width: 130px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .movie-card,
+            .card-watch,
+            .card-thumb,
+            .filter-pill {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">MOVIE<em>FLIX</em></div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#" class="active">Movies</a></li>
+            <li><a href="#">Genres</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+        <div class="nav-right">
+            <input type="text" id="searchInput" placeholder="Search movies..." />
+            <a href="login.html" class="btn-signin">Sign In</a>
+        </div>
+    </nav>
+
+    <div class="filmstrip"></div>
+
+    <div class="page-header">
+        <div class="eyebrow">🎬 Full Library</div>
+        <h1>All Movies</h1>
+        <p>Every title in the house, sorted, rated, and ready to roll. Pick a genre or search to narrow the reel.</p>
+    </div>
+
+    <div class="filters" id="filters">
+        <button class="filter-pill active" data-genre="all">All</button>
+        <button class="filter-pill" data-genre="Action">Action</button>
+        <button class="filter-pill" data-genre="Sci-Fi">Sci-Fi</button>
+        <button class="filter-pill" data-genre="Crime">Crime</button>
+        <button class="filter-pill" data-genre="Comedy">Comedy</button>
+        <button class="filter-pill" data-genre="Drama">Drama</button>
+        <button class="filter-pill" data-genre="History">History</button>
+        <button class="filter-pill" data-genre="Thriller">Thriller</button>
+    </div>
+
+    <div class="filmstrip dim"></div>
+
+    <div class="section">
+        <div class="section-title">Now Showing</div>
+        <div class="movie-grid" id="movieGrid">
+
+            <div class="movie-card" data-genre="Action" data-title="spider-man: nwh">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/2d/10/0b/2d100b58233573d5ddb146c5412bda85.jpg"
+                        alt="Spider-Man: No Way Home poster" />
+                    <div class="card-rating-seal">8.3</div>
+                    <div class="card-genre-tag">Action</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Spider-Man: NWH</div>
+                    <div class="card-meta">2021 &nbsp;·&nbsp; <strong>Action</strong></div>
+                    <a href="https://www.youtube.com/watch?v=UYkUtbTxWu0" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Action" data-title="spider-man: nwh">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/ec/8a/a0/ec8aa029c0b7ef5d97f68eeba2aa9160.jpg"
+                        alt="Spider-Man: No Way Home poster" />
+                    <div class="card-rating-seal">8.3</div>
+                    <div class="card-genre-tag">Action</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Spider-Man: NWH</div>
+                    <div class="card-meta">2021 &nbsp;·&nbsp; <strong>Action</strong></div>
+                    <a href="https://www.youtube.com/watch?v=UYkUtbTxWu0" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Action" data-title="spider-man: nwh">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/f3/f4/c6/f3f4c64663457d886bd7508b6950c433.jpg"
+                        alt="Spider-Man: No Way Home poster" />
+                    <div class="card-rating-seal">8.3</div>
+                    <div class="card-genre-tag">Action</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Spider-Man: NWH</div>
+                    <div class="card-meta">2021 &nbsp;·&nbsp; <strong>Action</strong></div>
+                    <a href="https://www.youtube.com/watch?v=UYkUtbTxWu0" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+             <div class="movie-card" data-genre="Action" data-title="spider-man: nwh">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/3b/8b/27/3b8b27fdc85a572fea2623bb4d918029.jpg"
+                        alt="Spider-Man: No Way Home poster" />
+                    <div class="card-rating-seal">8.3</div>
+                    <div class="card-genre-tag">Action</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Spider-Man: NWH</div>
+                    <div class="card-meta">2021 &nbsp;·&nbsp; <strong>Action</strong></div>
+                    <a href="https://www.youtube.com/watch?v=UYkUtbTxWu0" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+             <div class="movie-card" data-genre="Action" data-title="spider-man: nwh">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/dc/77/a2/dc77a2ce208d4333898c1650f6d2fba7.jpg"
+                        alt="Spider-Man: No Way Home poster" />
+                    <div class="card-rating-seal">8.3</div>
+                    <div class="card-genre-tag">Action</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Spider-Man: NWH</div>
+                    <div class="card-meta">2021 &nbsp;·&nbsp; <strong>Action</strong></div>
+                    <a href="https://www.youtube.com/watch?v=UYkUtbTxWu0" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+             <div class="movie-card" data-genre="Action" data-title="spider-man: nwh">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/bc/af/43/bcaf4391b6cfc77a74ede9536e411c36.jpg"
+                        alt="Spider-Man: No Way Home poster" />
+                    <div class="card-rating-seal">8.3</div>
+                    <div class="card-genre-tag">Action</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Spider-Man: NWH</div>
+                    <div class="card-meta">2021 &nbsp;·&nbsp; <strong>Action</strong></div>
+                    <a href="https://www.youtube.com/watch?v=UYkUtbTxWu0" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+             <div class="movie-card" data-genre="Action" data-title="spider-man: nwh">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/31/8d/07/318d07a48fb6f063a5b01c4b0a0f5416.jpg"
+                        alt="Spider-Man: No Way Home poster" />
+                    <div class="card-rating-seal">8.3</div>
+                    <div class="card-genre-tag">Action</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Spider-Man: NWH</div>
+                    <div class="card-meta">2021 &nbsp;·&nbsp; <strong>Action</strong></div>
+                    <a href="https://www.youtube.com/watch?v=UYkUtbTxWu0" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            
+            <div class="movie-card" data-genre="Action" data-title="spider-man: nwh">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/ff/a5/76/ffa57667132fe69dd8a9c5330ed50833.jpg"
+                        alt="Spider-Man: No Way Home poster" />
+                    <div class="card-rating-seal">8.3</div>
+                    <div class="card-genre-tag">Action</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Spider-Man: NWH</div>
+                    <div class="card-meta">2021 &nbsp;·&nbsp; <strong>Action</strong></div>
+                    <a href="https://www.youtube.com/watch?v=_ZpnmlsjpP0&list=RD_ZpnmlsjpP0&start_radio=1" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+
+            <div class="movie-card" data-genre="Sci-Fi" data-title="avatar: way of water">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/0b/53/46/0b5346eb292a8de997cf3d3861bf7c38.jpg"
+                        alt="Avatar: The Way of Water poster" />
+                    <div class="card-rating-seal">7.6</div>
+                    <div class="card-genre-tag">Sci-Fi</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Schindlers List</div>
+                    <div class="card-meta">2022 &nbsp;·&nbsp; <strong>Sci-Fi</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Sci-Fi" data-title="avatar: way of water">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/7b/15/8b/7b158bdd2b9d51b4cbba793220561ba2.jpg"
+                        alt="Avatar: The Way of Water poster" />
+                    <div class="card-rating-seal">7.6</div>
+                    <div class="card-genre-tag">Sci-Fi</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Avatar: Way of Water</div>
+                    <div class="card-meta">2022 &nbsp;·&nbsp; <strong>Sci-Fi</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Sci-Fi" data-title="avatar: way of water">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/7f/88/85/7f8885c1ab392c6291679e1b2da84d48.jpg"
+                        alt="Avatar: The Way of Water poster" />
+                    <div class="card-rating-seal">7.6</div>
+                    <div class="card-genre-tag">Sci-Fi</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Avatar: Way of Water</div>
+                    <div class="card-meta">2022 &nbsp;·&nbsp; <strong>Sci-Fi</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Sci-Fi" data-title="avatar: way of water">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/ff/e1/97/ffe197a66417d2f57ac650ba37af16ad.jpg"
+                        alt="Avatar: The Way of Water poster" />
+                    <div class="card-rating-seal">7.6</div>
+                    <div class="card-genre-tag">Sci-Fi</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Avatar: Way of Water</div>
+                    <div class="card-meta">2022 &nbsp;·&nbsp; <strong>Sci-Fi</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Sci-Fi" data-title="avatar: way of water">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/a9/a7/c4/a9a7c40564c1cb1fcfcc907197574291.jpg"
+                        alt="Avatar: The Way of Water poster" />
+                    <div class="card-rating-seal">7.6</div>
+                    <div class="card-genre-tag">Sci-Fi</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Avatar: Way of Water</div>
+                    <div class="card-meta">2022 &nbsp;·&nbsp; <strong>Sci-Fi</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Sci-Fi" data-title="avatar: way of water">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/7f/0e/c0/7f0ec0bd010bbed4448584877cc9cd49.jpg"
+                        alt="Avatar: The Way of Water poster" />
+                    <div class="card-rating-seal">7.6</div>
+                    <div class="card-genre-tag">Sci-Fi</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Avatar: Way of Water</div>
+                    <div class="card-meta">2022 &nbsp;·&nbsp; <strong>Sci-Fi</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Sci-Fi" data-title="avatar: way of water">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/4b/88/58/4b8858edf4c3f3abaa390bf6edbf034e.jpg"
+                        alt="Avatar: The Way of Water poster" />
+                    <div class="card-rating-seal">7.6</div>
+                    <div class="card-genre-tag">Sci-Fi</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Avatar: Way of Water</div>
+                    <div class="card-meta">2022 &nbsp;·&nbsp; <strong>Sci-Fi</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+
+            <div class="movie-card" data-genre="Crime" data-title="the dark knight">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/e4/c7/ab/e4c7abbec7ae92ee29ab263d6dcbfa4a.jpg"
+                        alt="The Dark Knight poster" />
+                    <div class="card-rating-seal">9.0</div>
+                    <div class="card-genre-tag">Crime</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">The Dark Knight</div>
+                    <div class="card-meta">2008 &nbsp;·&nbsp; <strong>Crime</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Crime" data-title="the dark knight">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/be/98/53/be985391efd74de92703eccc0fcce09d.jpg"
+                        alt="The Dark Knight poster" />
+                    <div class="card-rating-seal">9.0</div>
+                    <div class="card-genre-tag">Crime</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">The Dark Knight</div>
+                    <div class="card-meta">2008 &nbsp;·&nbsp; <strong>Crime</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Crime" data-title="the dark knight">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/7f/93/2f/7f932fbde6dd3f7808fa0fd22be10d72.jpg"
+                        alt="The Dark Knight poster" />
+                    <div class="card-rating-seal">9.0</div>
+                    <div class="card-genre-tag">Crime</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">The call</div>
+                    <div class="card-meta">2008 &nbsp;·&nbsp; <strong>Crime</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Crime" data-title="the dark knight">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/d7/a8/72/d7a8726a68d11d76cc7a7f3bf3e94ca9.jpg"
+                        alt="The Dark Knight poster" />
+                    <div class="card-rating-seal">9.0</div>
+                    <div class="card-genre-tag">Crime</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">The Dark Knight</div>
+                    <div class="card-meta">2008 &nbsp;·&nbsp; <strong>Crime</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Crime" data-title="the dark knight">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/6d/50/c4/6d50c488871ef49543985562efce20cf.jpg"
+                        alt="The Dark Knight poster" />
+                    <div class="card-rating-seal">9.0</div>
+                    <div class="card-genre-tag">Crime</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">The Dark Knight</div>
+                    <div class="card-meta">2008 &nbsp;·&nbsp; <strong>Crime</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Crime" data-title="the dark knight">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/01/42/3b/01423b365c898da258ace6112aca54d7.jpg"
+                        alt="The Dark Knight poster" />
+                    <div class="card-rating-seal">9.0</div>
+                    <div class="card-genre-tag">Crime</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">The Dark Knight</div>
+                    <div class="card-meta">2008 &nbsp;·&nbsp; <strong>Crime</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Crime" data-title="the dark knight">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/ad/83/30/ad833002dd0a4a07a09563ee08b87921.jpg"
+                        alt="The Dark Knight poster" />
+                    <div class="card-rating-seal">9.0</div>
+                    <div class="card-genre-tag">Crime</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">The Dark Knight</div>
+                    <div class="card-meta">2008 &nbsp;·&nbsp; <strong>Crime</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Crime" data-title="the dark knight">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/58/0b/1b/580b1bb788a55737a18ba5e2f330802f.jpg"
+                        alt="The Dark Knight poster" />
+                    <div class="card-rating-seal">9.0</div>
+                    <div class="card-genre-tag">Crime</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">The Dark Knight</div>
+                    <div class="card-meta">2008 &nbsp;·&nbsp; <strong>Crime</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+
+            <div class="movie-card" data-genre="Comedy" data-title="guardians vol. 3">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/a3/64/9d/a3649d8958e9b6e44c2c0806edd30cd9.jpg"
+                        alt="Guardians of the Galaxy Vol. 3 poster" />
+                    <div class="card-rating-seal">7.9</div>
+                    <div class="card-genre-tag">Comedy</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Guardians Vol. 3</div>
+                    <div class="card-meta">2023 &nbsp;·&nbsp; <strong>Comedy</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+             <div class="movie-card" data-genre="Comedy" data-title="guardians vol. 3">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/8b/dc/5e/8bdc5e6485c9d24fafd68105cd63a1f9.jpg"
+                        alt="Guardians of the Galaxy Vol. 3 poster" />
+                    <div class="card-rating-seal">7.9</div>
+                    <div class="card-genre-tag">Comedy</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Guardians Vol. 3</div>
+                    <div class="card-meta">2023 &nbsp;·&nbsp; <strong>Comedy</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+             <div class="movie-card" data-genre="Comedy" data-title="guardians vol. 3">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/d5/41/26/d541269feb4ec440e6e7299e3f53d43e.jpg"
+                        alt="Guardians of the Galaxy Vol. 3 poster" />
+                    <div class="card-rating-seal">7.9</div>
+                    <div class="card-genre-tag">Comedy</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Guardians Vol. 3</div>
+                    <div class="card-meta">2023 &nbsp;·&nbsp; <strong>Comedy</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+             <div class="movie-card" data-genre="Comedy" data-title="guardians vol. 3">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/1f/a8/6c/1fa86c2e05f4bfeaed40684779c5d990.jpg"
+                        alt="Guardians of the Galaxy Vol. 3 poster" />
+                    <div class="card-rating-seal">7.9</div>
+                    <div class="card-genre-tag">Comedy</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Guardians Vol. 3</div>
+                    <div class="card-meta">2023 &nbsp;·&nbsp; <strong>Comedy</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+             <div class="movie-card" data-genre="Comedy" data-title="guardians vol. 3">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/75/71/c1/7571c1a2bfa60085456ec71f7bfd8ab8.jpg"
+                        alt="Guardians of the Galaxy Vol. 3 poster" />
+                    <div class="card-rating-seal">7.9</div>
+                    <div class="card-genre-tag">Comedy</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Guardians Vol. 3</div>
+                    <div class="card-meta">2023 &nbsp;·&nbsp; <strong>Comedy</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+             <div class="movie-card" data-genre="Comedy" data-title="guardians vol. 3">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/5d/8b/a1/5d8ba12619250c3656539b69e5586b0c.jpg"
+                        alt="Guardians of the Galaxy Vol. 3 poster" />
+                    <div class="card-rating-seal">7.9</div>
+                    <div class="card-genre-tag">Comedy</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Guardians Vol. 3</div>
+                    <div class="card-meta">2023 &nbsp;·&nbsp; <strong>Comedy</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+             <div class="movie-card" data-genre="Comedy" data-title="guardians vol. 3">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/f6/13/5d/f6135df5ca609237caf060e5fb1af082.jpg"
+                        alt="Guardians of the Galaxy Vol. 3 poster" />
+                    <div class="card-rating-seal">7.9</div>
+                    <div class="card-genre-tag">Comedy</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Guardians Vol. 3</div>
+                    <div class="card-meta">2023 &nbsp;·&nbsp; <strong>Comedy</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+             <div class="movie-card" data-genre="Comedy" data-title="guardians vol. 3">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/ad/78/bb/ad78bbf3da10e6b511e4146569c43ca7.jpg"
+                        alt="Guardians of the Galaxy Vol. 3 poster" />
+                    <div class="card-rating-seal">7.9</div>
+                    <div class="card-genre-tag">Comedy</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Guardians Vol. 3</div>
+                    <div class="card-meta">2023 &nbsp;·&nbsp; <strong>Comedy</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+
+            <div class="movie-card" data-genre="Drama" data-title="the shawshank redemption">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/08/6f/fe/086ffeccab22baa2b4d49ab8787f9b90.jpg"
+                        alt="The Shawshank Redemption poster" />
+                    <div class="card-rating-seal">9.3</div>
+                    <div class="card-genre-tag">Drama</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">The Shawshank Redemption</div>
+                    <div class="card-meta">1994 &nbsp;·&nbsp; <strong>Drama</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Drama" data-title="the shawshank redemption">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/63/ec/de/63ecde5078fd13983c52451a5e9376e4.jpg"
+                        alt="The Shawshank Redemption poster" />
+                    <div class="card-rating-seal">9.3</div>
+                    <div class="card-genre-tag">Drama</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">The Shawshank Redemption</div>
+                    <div class="card-meta">1994 &nbsp;·&nbsp; <strong>Drama</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Drama" data-title="the shawshank redemption">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/5f/12/09/5f1209b6b5b0636da186ad8ad1813290.jpg"
+                        alt="The Shawshank Redemption poster" />
+                    <div class="card-rating-seal">9.3</div>
+                    <div class="card-genre-tag">Drama</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">The Shawshank Redemption</div>
+                    <div class="card-meta">1994 &nbsp;·&nbsp; <strong>Drama</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Drama" data-title="the shawshank redemption">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/aa/79/4c/aa794ca27e9af40ffc366f154c182b27.jpg"
+                        alt="The Shawshank Redemption poster" />
+                    <div class="card-rating-seal">9.3</div>
+                    <div class="card-genre-tag">Drama</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">The Shawshank Redemption</div>
+                    <div class="card-meta">1994 &nbsp;·&nbsp; <strong>Drama</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Drama" data-title="the shawshank redemption">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/56/5d/7b/565d7b893fa631addfd215ba8ce28871.jpg"
+                        alt="The Shawshank Redemption poster" />
+                    <div class="card-rating-seal">9.3</div>
+                    <div class="card-genre-tag">Drama</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">The Shawshank Redemption</div>
+                    <div class="card-meta">1994 &nbsp;·&nbsp; <strong>Drama</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Drama" data-title="the shawshank redemption">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/17/01/4a/17014a3ad6e2737a366b0562b68c3c9a.jpg"
+                        alt="The Shawshank Redemption poster" />
+                    <div class="card-rating-seal">9.3</div>
+                    <div class="card-genre-tag">Drama</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">The Shawshank Redemption</div>
+                    <div class="card-meta">1994 &nbsp;·&nbsp; <strong>Drama</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Drama" data-title="the shawshank redemption">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/d8/d8/3f/d8d83f4042e1d988b71680a882a8b8db.jpg"
+                        alt="The Shawshank Redemption poster" />
+                    <div class="card-rating-seal">9.3</div>
+                    <div class="card-genre-tag">Drama</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">The Shawshank Redemption</div>
+                    <div class="card-meta">1994 &nbsp;·&nbsp; <strong>Drama</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="Drama" data-title="the shawshank redemption">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/1f/7f/10/1f7f10925836a568edc1f20e52583468.jpg"
+                        alt="The Shawshank Redemption poster" />
+                    <div class="card-rating-seal">9.3</div>
+                    <div class="card-genre-tag">Drama</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">The Shawshank Redemption</div>
+                    <div class="card-meta">1994 &nbsp;·&nbsp; <strong>Drama</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+
+            <div class="movie-card" data-genre="History" data-title="oppenheimer">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/77/9d/a3/779da30964fb69b47c4f03138d482f9d.jpg"
+                        alt="Oppenheimer poster" />
+                    <div class="card-rating-seal">8.9</div>
+                    <div class="card-genre-tag">History</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Oppenheimer</div>
+                    <div class="card-meta">2023 &nbsp;·&nbsp; <strong>History</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="History" data-title="oppenheimer">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/80/73/44/80734465e94f48f0fda4df02076fa1fe.jpg"
+                        alt="Oppenheimer poster" />
+                    <div class="card-rating-seal">8.9</div>
+                    <div class="card-genre-tag">History</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Oppenheimer</div>
+                    <div class="card-meta">2023 &nbsp;·&nbsp; <strong>History</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="History" data-title="oppenheimer">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/ec/3d/52/ec3d52daa56bd9c2abf0d82952d3b8ad.jpg"
+                        alt="Oppenheimer poster" />
+                    <div class="card-rating-seal">8.9</div>
+                    <div class="card-genre-tag">History</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Oppenheimer</div>
+                    <div class="card-meta">2023 &nbsp;·&nbsp; <strong>History</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="History" data-title="oppenheimer">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/f2/9e/8a/f29e8af546f77259bdde573fc0393012.jpg"
+                        alt="Oppenheimer poster" />
+                    <div class="card-rating-seal">8.9</div>
+                    <div class="card-genre-tag">History</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Oppenheimer</div>
+                    <div class="card-meta">2023 &nbsp;·&nbsp; <strong>History</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="History" data-title="oppenheimer">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/fe/60/ba/fe60baecc712980f46f525e5a8c95a8f.jpg"
+                        alt="Oppenheimer poster" />
+                    <div class="card-rating-seal">8.9</div>
+                    <div class="card-genre-tag">History</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Oppenheimer</div>
+                    <div class="card-meta">2023 &nbsp;·&nbsp; <strong>History</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="History" data-title="oppenheimer">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/7a/72/57/7a725706e4bbdba493ca312b7061d2ff.jpg"
+                        alt="Oppenheimer poster" />
+                    <div class="card-rating-seal">8.9</div>
+                    <div class="card-genre-tag">History</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Oppenheimer</div>
+                    <div class="card-meta">2023 &nbsp;·&nbsp; <strong>History</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="History" data-title="oppenheimer">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/f3/74/8a/f3748a3e87abb69a94f45310864328e3.jpg"
+                        alt="Oppenheimer poster" />
+                    <div class="card-rating-seal">8.9</div>
+                    <div class="card-genre-tag">History</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Oppenheimer</div>
+                    <div class="card-meta">2023 &nbsp;·&nbsp; <strong>History</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+            <div class="movie-card" data-genre="History" data-title="oppenheimer">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/9c/f7/ed/9cf7ed593aff4d78550ff12926544dd8.jpg"
+                        alt="Oppenheimer poster" />
+                    <div class="card-rating-seal">8.9</div>
+                    <div class="card-genre-tag">History</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Oppenheimer</div>
+                    <div class="card-meta">2023 &nbsp;·&nbsp; <strong>History</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+
+            <div class="movie-card" data-genre="Thriller" data-title="inception">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/bc/ca/08/bcca0847ad75e34398be5c8673a64aac.jpg"
+                        alt="Inception poster" />
+                    <div class="card-rating-seal">8.8</div>
+                    <div class="card-genre-tag">Thriller</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Inception</div>
+                    <div class="card-meta">2010 &nbsp;·&nbsp; <strong>Thriller</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+             <div class="movie-card" data-genre="Thriller" data-title="inception">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/6c/95/26/6c95264e81cf66b9fe6273ca5e8a5fe9.jpg"
+                        alt="Inception poster" />
+                    <div class="card-rating-seal">8.8</div>
+                    <div class="card-genre-tag">Thriller</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Inception</div>
+                    <div class="card-meta">2010 &nbsp;·&nbsp; <strong>Thriller</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+             <div class="movie-card" data-genre="Thriller" data-title="inception">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/78/ab/29/78ab2982e2eff98db5adb42d60b387d8.jpg"
+                        alt="Inception poster" />
+                    <div class="card-rating-seal">8.8</div>
+                    <div class="card-genre-tag">Thriller</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Inception</div>
+                    <div class="card-meta">2010 &nbsp;·&nbsp; <strong>Thriller</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+             <div class="movie-card" data-genre="Thriller" data-title="inception">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/14/19/5a/14195a550734fdfb70e05e2f1338890c.jpg"
+                        alt="Inception poster" />
+                    <div class="card-rating-seal">8.8</div>
+                    <div class="card-genre-tag">Thriller</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Inception</div>
+                    <div class="card-meta">2010 &nbsp;·&nbsp; <strong>Thriller</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+             <div class="movie-card" data-genre="Thriller" data-title="inception">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/99/9e/f5/999ef5c7319bedcd0538f1628b5397b9.jpg"
+                        alt="Inception poster" />
+                    <div class="card-rating-seal">8.8</div>
+                    <div class="card-genre-tag">Thriller</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Inception</div>
+                    <div class="card-meta">2010 &nbsp;·&nbsp; <strong>Thriller</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+             <div class="movie-card" data-genre="Thriller" data-title="inception">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/95/21/a3/9521a3ba09dd6dce0bf118550dd5ee86.jpg"
+                        alt="Inception poster" />
+                    <div class="card-rating-seal">8.8</div>
+                    <div class="card-genre-tag">Thriller</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Inception</div>
+                    <div class="card-meta">2010 &nbsp;·&nbsp; <strong>Thriller</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+             <div class="movie-card" data-genre="Thriller" data-title="inception">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/d9/df/d8/d9dfd88edcd31b99745d86dcf6364ca0.jpg"
+                        alt="Inception poster" />
+                    <div class="card-rating-seal">8.8</div>
+                    <div class="card-genre-tag">Thriller</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Inception</div>
+                    <div class="card-meta">2010 &nbsp;·&nbsp; <strong>Thriller</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+             <div class="movie-card" data-genre="Thriller" data-title="inception">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/fb/6a/f0/fb6af0e51dc51c248255d759a6baaa9a.jpg"
+                        alt="Inception poster" />
+                    <div class="card-rating-seal">8.8</div>
+                    <div class="card-genre-tag">Thriller</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Inception</div>
+                    <div class="card-meta">2010 &nbsp;·&nbsp; <strong>Thriller</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+
+            <div class="movie-card" data-genre="Sci-Fi" data-title="interstellar">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/0b/34/ce/0b34ce2145b475247577a5d438a199b0.jpg"
+                        alt="Interstellar poster" />
+                    <div class="card-rating-seal">8.7</div>
+                    <div class="card-genre-tag">Sci-Fi</div>
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Interstellar</div>
+                    <div class="card-meta">2014 &nbsp;·&nbsp; <strong>Sci-Fi</strong></div>
+                    <a href="#" class="card-watch">▶ Watch</a>
+                </div>
+            </div>
+
+            <div class="empty-state" id="emptyState" style="display:none;">
+                <div class="glyph-big">🎬</div>
+                No movies match your search — try another title or genre.
+            </div>
+
+        </div>
+    </div>
+
+    <div class="filmstrip dim"></div>
+
+    <div class="section">
+        <div class="section-title">Coming Soon</div>
+        <div class="movie-grid">
+            <div class="movie-card">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/23/14/b2/2314b216f3d18fc3f1a8f763175f6581.jpg"
+                        alt="Thunderbolts poster" />
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Thunderbolts*</div>
+                    <span class="card-soon">Coming 2025</span>
+                </div>
+            </div>
+            <div class="movie-card">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/45/23/41/45234178fd635f2503ed5c7276dfa518.jpg"
+                        alt="The Batman 2 poster" />
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">The Batman 2</div>
+                    <span class="card-soon">Coming 2026</span>
+                </div>
+            </div>
+            <div class="movie-card">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/736x/14/0f/c1/140fc13d339b3ced9e272071e05f8569.jpg"
+                        alt="Wednesday poster" />
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Wednesday</div>
+                    <span class="card-soon">Coming 2025</span>
+                </div>
+            </div>
+            <div class="movie-card">
+                <div class="card-thumb-wrap">
+                    <img class="card-thumb"
+                        src="https://i.pinimg.com/1200x/d5/8c/62/d58c623360285d953ffd6c68afc25d5e.jpg"
+                        alt="Doctor Strange 3 poster" />
+                </div>
+                <div class="card-tear"></div>
+                <div class="card-info">
+                    <div class="card-title">Doctor Strange 3</div>
+                    <span class="card-soon">Coming 2026</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="filmstrip"></div>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#">About</a>
+            <a href="#">Privacy</a>
+            <a href="#">Contact</a>
+            <a href="#">Facebook</a>
+            <a href="#">Instagram</a>
+            <a href="#">YouTube</a>
+        </div>
+        <div class="footer-copy">&copy; 2026 MovieFlix. All rights reserved.</div>
+    </footer>
+
+    <script>
+        const filters = document.getElementById('filters');
+        const grid = document.getElementById('movieGrid');
+        const cards = Array.from(grid.querySelectorAll('.movie-card'));
+        const emptyState = document.getElementById('emptyState');
+        const searchInput = document.getElementById('searchInput');
+
+        function currentGenre() {
+            return filters.querySelector('.filter-pill.active').dataset.genre;
+        }
+        function applyFilters() {
+            const genre = currentGenre();
+            const query = searchInput.value.trim().toLowerCase();
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const matchesGenre = genre === 'all' || card.dataset.genre === genre;
+                const matchesQuery = card.dataset.title.includes(query);
+                const show = matchesGenre && matchesQuery;
+                card.style.display = show ? '' : 'none';
+                if (show) visibleCount++;
+            });
+            emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+        filters.addEventListener('click', (e) => {
+            const btn = e.target.closest('.filter-pill');
+            if (!btn) return;
+            filters.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            applyFilters();
+        });
+        searchInput.addEventListener('input', applyFilters);
+    </script>
+
+</body>
+
+</html>

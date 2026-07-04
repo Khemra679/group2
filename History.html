@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MovieFlix — Watch: The Call</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0a0f;
+    --bg-raised: #171420;
+    --bg-card: #1c1826;
+    --gold: #e8b54d;
+    --gold-dim: #a3823a;
+    --crimson: #c81e3a;
+    --crimson-bright: #e6304c;
+    --cream: #f4ecd8;
+    --muted: #948d9e;
+    --hairline: #322c3c;
+    --radius: 3px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Work Sans', sans-serif;
+    background-color: var(--bg);
+    color: var(--cream);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; }
+
+  h1, h2, .display {
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+  }
+
+  .filmstrip {
+    height: 14px;
+    background-image:
+      radial-gradient(circle, var(--bg) 3.5px, transparent 3.6px),
+      radial-gradient(circle, var(--bg) 3.5px, transparent 3.6px);
+    background-color: var(--gold-dim);
+    background-position: 0 0, 17px 0;
+    background-size: 34px 14px;
+    background-repeat: repeat-x;
+  }
+  .filmstrip.dim { background-color: var(--hairline); }
+
+  nav {
+    background-color: var(--bg);
+    padding: 18px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .logo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+  .logo::before {
+    content: "●";
+    color: var(--crimson-bright);
+    font-size: 11px;
+  }
+  .logo em { font-style: normal; color: var(--cream); }
+
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 32px;
+  }
+  .nav-links a {
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-bottom: 4px;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); border-color: var(--gold); }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .nav-right input {
+    padding: 9px 14px;
+    border: 1px solid var(--hairline);
+    background-color: var(--bg-raised);
+    color: var(--cream);
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-family: 'Work Sans', sans-serif;
+    width: 180px;
+  }
+  .nav-right input::placeholder { color: var(--muted); }
+  .nav-right input:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+
+  .btn-signin {
+    background-color: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 8px 18px;
+    text-decoration: none;
+    border-radius: var(--radius);
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  .btn-signin:hover { background-color: var(--gold); color: var(--bg); }
+
+  .watch-wrap {
+    display: flex;
+    align-items: flex-start;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 980px) {
+    .watch-wrap { flex-direction: column; }
+  }
+
+  .player-col {
+    flex: 1 1 68%;
+    min-width: 0;
+  }
+
+  .player-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: #000;
+    overflow: hidden;
+  }
+
+  .player-frame .poster-fill {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border: none;
+    opacity: 0.85;
+  }
+  .player-topbar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 22px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.75), transparent);
+    z-index: 2;
+  }
+
+  .player-topbar .ep-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--cream);
+  }
+
+  .player-topbar .icon-group {
+    display: flex;
+    gap: 18px;
+  }
+  .player-topbar .icon-group span {
+    font-size: 16px;
+    color: var(--cream);
+    opacity: 0.85;
+    cursor: pointer;
+  }
+
+  .play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+  .play-overlay button {
+    width: 74px;
+    height: 74px;
+    border-radius: 50%;
+    background-color: rgba(232,181,77,0.15);
+    border: 1.5px solid var(--gold);
+    color: var(--gold);
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(2px);
+    transition: background-color 0.2s, transform 0.15s;
+  }
+  .play-overlay button:hover { background-color: rgba(232,181,77,0.28); transform: scale(1.04); }
+
+  .info-col {
+    flex: 1 1 32%;
+    background-color: var(--bg-raised);
+    padding: 28px 32px;
+    min-height: 100%;
+    border-left: 1px solid var(--hairline);
+  }
+
+  .info-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: var(--crimson);
+    color: var(--cream);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-bottom: 14px;
+  }
+
+  .info-col h1 {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    line-height: 1.25;
+    margin-bottom: 8px;
+    text-transform: none;
+  }
+
+  .info-date {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 18px;
+  }
+
+  .tag-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 26px;
+  }
+  .tag-pill {
+    font-size: 11px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--hairline);
+    background-color: var(--bg-card);
+    padding: 5px 12px;
+    border-radius: 20px;
+  }
+
+  .action-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 18px 6px;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    margin-bottom: 20px;
+  }
+  .action-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: var(--cream);
+    cursor: pointer;
+    font-family: 'Work Sans', sans-serif;
+  }
+  .action-item .ic {
+    font-size: 18px;
+    color: var(--gold);
+  }
+  .action-item span.label {
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .action-item:hover .ic { color: var(--crimson-bright); }
+
+  .note-line {
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 22px;
+  }
+
+  .desc-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--bg-card);
+    border: 1px solid var(--hairline);
+    color: var(--cream);
+    padding: 14px 16px;
+    border-radius: var(--radius);
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-bottom: 4px;
+  }
+  .desc-toggle .chev { color: var(--gold); transition: transform 0.2s; }
+  .desc-toggle.open .chev { transform: rotate(180deg); }
+
+  .desc-body {
+    display: none;
+    padding: 14px 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--muted);
+    border: 1px solid var(--hairline);
+    border-top: none;
+    border-radius: 0 0 var(--radius) var(--radius);
+    margin-bottom: 24px;
+  }
+  .desc-body.open { display: block; }
+ .ep-heading {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .ep-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .ep-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+  .ep-pill {
+    background-color: var(--bg-card);
+    border: 1px solid var(--hairline);
+    color: var(--cream);
+    text-align: center;
+    padding: 10px 0;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .ep-pill.active {
+    background-color: var(--gold);
+    color: var(--bg);
+    border-color: var(--gold);
+  }
+  .ep-pill:hover:not(.active) { border-color: var(--gold-dim); color: var(--gold); }
+
+  footer {
+    background-color: var(--bg);
+    padding: 36px 48px 28px;
+    text-align: center;
+    border-top: 1px solid var(--hairline);
+    margin-top: 8px;
+  }
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .footer-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-copy {
+    color: #524b5e;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 720px) {
+    nav { flex-wrap: wrap; gap: 14px; padding: 16px 20px; }
+    .nav-links { display: none; }
+    .info-col { border-left: none; border-top: 1px solid var(--hairline); }
+    .ep-grid { grid-template-columns: repeat(4, 1fr); }
+    .nav-right input { width: 130px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+
+<body>
+
+  <nav>
+    <a href="index.html" class="logo">MOVIE<em>FLIX</em></a>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Movies</a></li>
+      <li><a href="#">Genres</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <input type="text" placeholder="Search movies..." />
+      <a href="login.html" class="btn-signin">Sign In</a>
+    </div>
+  </nav>
+
+  <div class="filmstrip"></div>
+
+  <div class="watch-wrap">
+
+    <!-- Player column -->
+    <div class="player-col">
+      <div class="player-frame">
+        <iframe
+          class="poster-fill"
+          style="position:absolute; top:0; left:0;"
+          src="https://www.youtube.com/embed/zFWC_tJeGp0?si=yVxgVNMDuJ-OUuSj"
+          title="Avengers: Endgame trailer"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+        <div class="player-topbar">
+          <span class="ep-label">Episode 1</span>
+          <div class="icon-group">
+            <span title="Captions">CC</span>
+            <span title="Locked">🔒</span>
+            <span title="More">⋮</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info sidebar -->
+    <div class="info-col">
+      <div class="info-badge">🎟 Now Showing</div>
+      <h1>Oppenheimer</h1>
+      <div class="info-date">Released Apr 26, 2019</div>
+
+      <div class="tag-row">
+        <span class="tag-pill">Korea</span>
+        <span class="tag-pill">Completed</span>
+        <span class="tag-pill">Marvel Studios</span>
+      </div>
+ <div class="action-row">
+        <button class="action-item">
+          <span class="ic">♡</span>
+          <span class="label">Favorite</span>
+        </button>
+        <button class="action-item">
+          <span class="ic">⤴️</span>
+          <span class="label">Share</span>
+        </button>
+        <button class="action-item">
+          <span class="ic">⭳</span>
+          <span class="label">Download</span>
+        </button>
+        <button class="action-item">
+          <span class="ic">!</span>
+          <span class="label">Report</span>
+        </button>
+      </div>
+
+      <div class="note-line">Pop ads only have frequency of 1 pop per 1 hour.</div>
+
+      <button class="desc-toggle" id="descToggle">
+        Description
+        <span class="chev">⌄</span>
+      </button>
+      <div class="desc-body" id="descBody">
+       The movie follows Oppenheimer's scientific achievements, his leadership at Los Alamos Laboratory, the ethical and personal consequences of creating nuclear weapons, and the political scrutiny he faced during the early Cold War. It explores themes of ambition, responsibility, power, and the moral implications of scientific discovery.
+      </div>
+
+      <div class="ep-heading">Episode</div>
+      <div class="ep-sub">Total 1</div>
+      <div class="ep-grid">
+        <button class="ep-pill active">1</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="filmstrip dim"></div>
+
+  <footer>
+    <div class="footer-links">
+      <a href="#">About</a>
+      <a href="#">Privacy</a>
+      <a href="#">Contact</a>
+      <a href="#">Facebook</a>
+      <a href="#">Instagram</a>
+      <a href="#">YouTube</a>
+    </div>
+    <div class="footer-copy">&copy; 2026 MovieFlix. All rights reserved.</div>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('descToggle');
+    const body = document.getElementById('descBody');
+    toggle.addEventListener('click', () => {
+      toggle.classList.toggle('open');
+      body.classList.toggle('open');
+    });
+  </script>
+
+</body>
+</html>
