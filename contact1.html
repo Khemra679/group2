@@ -96,7 +96,18 @@
   }
   .nav-links a:hover, .nav-links a.active { color: var(--gold); border-color: var(--gold); }
 
-  .nav-right { display: flex; align-items: center; gap: 14px; }
+  .nav-right input {
+    padding: 9px 14px;
+    border: 1px solid var(--hairline);
+    background-color: var(--bg-raised);
+    color: var(--cream);
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-family: 'Work Sans', sans-serif;
+    width: 180px;
+  }
+  .nav-right input::placeholder { color: var(--muted); }
+  .nav-right input:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
 
   .btn-signin {
     background-color: transparent;
@@ -112,6 +123,7 @@
     transition: background-color 0.2s, color 0.2s;
   }
   .btn-signin:hover { background-color: var(--gold); color: var(--bg); }
+
 
   /* ---------- Page header ---------- */
   .page-header {
@@ -456,15 +468,16 @@
 <body>
 
   <nav>
-    <a href="index.html" class="logo">MOVIE<em>FLIX</em></a>
+    <div class="logo">MOVIE<em>FLIX</em></div>
     <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="#">Movies</a></li>
-      <li><a href="#">Genres</a></li>
-      <li><a href="#">About</a></li>
-      <li><a href="contact.html" class="active">Contact</a></li>
+      <li><a href="head1.html">Home</a></li>
+      <li><a href="Movie.html">Movies</a></li>
+      <li><a href="sak.html">Genres</a></li>
+      <li><a href="aboutpage.html">About</a></li>
+      <li><a href="contact1.html">Contact</a></li>
     </ul>
     <div class="nav-right">
+      <input type="text" placeholder="Search movies..." />
       <a href="login.html" class="btn-signin">Sign In</a>
     </div>
   </nav>
@@ -598,7 +611,7 @@
     <div class="footer-links">
       <a href="#">About</a>
       <a href="#">Privacy</a>
-      <a href="contact.html">Contact</a>
+      <a href="#">Contact</a>
       <a href="#">Facebook</a>
       <a href="#">Instagram</a>
       <a href="#">YouTube</a>

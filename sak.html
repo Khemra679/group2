@@ -190,11 +190,12 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 18px;
+    
   }
 
   .genre-tile {
     position: relative;
-    height: 168px;
+    height: 480px;
     border-radius: var(--radius);
     overflow: hidden;
     text-decoration: none;
@@ -320,7 +321,7 @@
 
   .card-thumb {
     width: 100%;
-    height: 320px;
+    height: 480px;
     object-fit: cover;
     display: block;
     border-radius: var(--radius) var(--radius) 0 0;
@@ -451,17 +452,17 @@
 <body>
 
   <nav>
-    <a href="index.html" class="logo">MOVIE<em>FLIX</em></a>
+    <div class="logo">MOVIE<em>FLIX</em></div>
     <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="#">Movies</a></li>
-      <li><a href="genres.html" class="active">Genres</a></li>
-      <li><a href="#">About</a></li>
-      <li><a href="#">Contact</a></li>
+      <li><a href="head1.html">Home</a></li>
+      <li><a href="Movie.html">Movies</a></li>
+      <li><a href="sak.html">Genres</a></li>
+      <li><a href="aboutpage.html">About</a></li>
+      <li><a href="contact1.html">Contact</a></li>
     </ul>
     <div class="nav-right">
-      <form ><input type="text" placeholder="Search movies..." /></form>
-     
+      <input type="text" placeholder="Search movies..." />
+      <a href="login.html" class="btn-signin">Sign In</a>
     </div>
   </nav>
 
